@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Store_Catalog.Api.Controllers
+namespace StoreCatalog.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

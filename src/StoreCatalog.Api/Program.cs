@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Store_Catalog.Api
+namespace StoreCatalog.Api
 {
     public class Program
     {

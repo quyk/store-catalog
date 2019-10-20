@@ -1,1 +1,1 @@
-# store-catalog
+# StoreCatalog
