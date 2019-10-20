@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StoreCatalog.Api.Controllers
 {
-    [Route("api/    ")]
+    [Route("api/production")]
     public class ProductionController : Controller
     {
         [HttpGet("areas")]
