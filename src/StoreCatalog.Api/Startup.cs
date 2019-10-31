@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using StoreCatalog.Domain.IoC;
 
 namespace StoreCatalog.Api
 {
@@ -19,8 +20,10 @@ namespace StoreCatalog.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services
+                .UseServices()
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddCors(options =>
             {
@@ -30,7 +33,6 @@ namespace StoreCatalog.Api
                     builder.WithMethods("GET", "OPTIONS", "HEAD");
                 });
             });
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Store Catalog", Version = "V1" });
