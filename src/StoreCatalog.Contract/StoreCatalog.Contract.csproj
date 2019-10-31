@@ -4,6 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>StoreCatalog.Contract</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>GeekBurger.StoreCatalog.Contract</PackageId>
+    <Authors>Felipe Somogyi, Kleber Lares, Osilmar Mendonça, Thiago Ramos</Authors>
+    <Product>GeekBurger.StoreCatalog.Contract</Product>
+    <Description>GeekBurger StoreCatalog Microservice Contract</Description>
+    <PackageProjectUrl>https://github.com/quyk/store-catalog</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/quyk/store-catalog</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
