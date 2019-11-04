@@ -30,7 +30,7 @@ namespace StoreCatalog.Api.Controllers
                 var products = await _productService.GetProductsAsync();
 
                 if (products != null)
-                    return Ok(_mapper.Map<IEnumerable<IProductResponse>>(products));
+                    return Ok(_mapper.Map<IEnumerable<ProductResponse>>(products));
                 else
                     return NotFound();
             }

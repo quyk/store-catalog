@@ -28,7 +28,7 @@ namespace StoreCatalog.Api.Controllers
                 var response = await _areaService.GetAreaAsync();
 
                 if (response != null)
-                    return Ok(_mapper.Map<IAreasResponse>(response));
+                    return Ok(_mapper.Map<AreasResponse>(response));
                 else
                     return NotFound();
             }

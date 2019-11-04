@@ -8,8 +8,8 @@ namespace StoreCatalog.Api.Profiles
     {
         public ProductModelProfile()
         {
-            CreateMap<ProductModel, IProductResponse>();
-            CreateMap<IProductResponse, ProductModel>();
+            CreateMap<ProductModel, ProductResponse>();
+            CreateMap<ProductResponse, ProductModel>();
         }
     }
 }
