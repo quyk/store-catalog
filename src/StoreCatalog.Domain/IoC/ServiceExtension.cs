@@ -7,12 +7,12 @@ namespace StoreCatalog.Domain.IoC
 {
     public static class ServiceExtension
     {
-        public static IServiceCollection UseServices(this IServiceCollection service)
+        public static IServiceCollection UseServices(this IServiceCollection services)
         {
-           service.AddSingleton<IAreaService, AreaService>();
-            service.AddSingleton<IProductService, ProductService>();
+            services.AddSingleton<IAreaService, AreaService>();
+            services.AddSingleton<IProductService, ProductService>();
 
-            return service;
+            return services;
         }
     }
 }

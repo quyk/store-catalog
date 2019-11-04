@@ -5,6 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using StoreCatalog.Domain.IoC;
+using Polly.Extensions.Http;
+using Polly;
+using System;
+using System.Net.Http;
+using System.Net;
+using AutoMapper;
+using StoreCatalog.Api.Profiles;
 
 namespace StoreCatalog.Api
 {
@@ -24,6 +31,21 @@ namespace StoreCatalog.Api
                 .UseServices()
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddHttpClient<IHttpClientFactory>().AddPolicyHandler(
+                HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .OrResult(msg => msg.StatusCode == HttpStatusCode.InternalServerError)
+                    .WaitAndRetryAsync(3, retryAttempt =>
+                    {
+                        return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
+                    })
+            );
+
+            services.AddAutoMapper(typeof(AreasModelProfile),
+                typeof(ProductModelProfile));
+
+            services.AddMemoryCache();
 
             services.AddCors(options =>
             {

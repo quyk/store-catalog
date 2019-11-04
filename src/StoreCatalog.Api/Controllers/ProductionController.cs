@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using StoreCatalog.Api.Models;
+using StoreCatalog.Contract.Responses;
+using StoreCatalog.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StoreCatalog.Api.Controllers
@@ -9,22 +11,31 @@ namespace StoreCatalog.Api.Controllers
     [Route("api/production")]
     public class ProductionController : Controller
     {
+        private readonly IAreaService _areaService;
+        private readonly IMapper _mapper;
+
+        public ProductionController(IAreaService areaService, IMapper mapper)
+        {
+            _areaService = areaService;
+            _mapper = mapper;
+        }
+
         [HttpGet("areas")]
         public async Task<ActionResult<AreasModel>> GetAreas()
         {
-            var area = new AreasModel
+            try
             {
-                ProductionId = new Guid("28AAE9F5-F9F2-499F-AB2A-134EAF42CB19"),
-                Restrictions = new List<string>
-                {
-                    "soy",
-                    "dairy",
-                    "gluten",
-                    "peanut"
-                },
-                On = true
-            };
-            return new OkObjectResult(area);
+                var response = await _areaService.GetAreaAsync();
+
+                if (response != null)
+                    return Ok(_mapper.Map<IAreasResponse>(response));
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }
