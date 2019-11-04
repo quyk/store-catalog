@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace StoreCatalog.Domain.Models.Area
 {
@@ -46,7 +47,11 @@ namespace StoreCatalog.Domain.Models.Area
                         areas = await response.Content.ReadAsJsonAsync<IEnumerable<AreasResponse>>();
                     }
 
-                    _memoryCache.Set(_cacheName, areas, cacheOptions);
+                    if (null != areas ||
+                        areas.Count() > 0)
+                    {
+                        _memoryCache.Set(_cacheName, areas, cacheOptions);
+                    }
                 }
             }
 

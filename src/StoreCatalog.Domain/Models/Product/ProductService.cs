@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace StoreCatalog.Domain.Models.Product
 {
@@ -46,7 +47,11 @@ namespace StoreCatalog.Domain.Models.Product
                         products = await response.Content.ReadAsJsonAsync<IEnumerable<ProductResponse>>();
                     }
 
-                    _memoryCache.Set(cacheName, products, cacheOptions);
+                    if (null != products &&
+                        products.Count() > 0)
+                    {
+                        _memoryCache.Set(cacheName, products, cacheOptions);
+                    }
                 }
             }
 
