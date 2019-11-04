@@ -5,6 +5,6 @@ namespace StoreCatalog.Domain.Interfaces
 {
     public interface IAreaService
     {
-        Task<IAreasResponse> GetAreaAsync();
+        Task<AreasResponse> GetAreaAsync();
     }
 }

@@ -26,11 +26,11 @@ namespace StoreCatalog.Domain.Models.Product
             _memoryCache = memoryCache;
         }
 
-        public async Task<IEnumerable<IProductResponse>> GetProductsAsync()
+        public async Task<IEnumerable<ProductResponse>> GetProductsAsync()
         {
             var cacheName = "products";
 
-            if (!_memoryCache.TryGetValue(cacheName, out IEnumerable<IProductResponse> products))
+            if (!_memoryCache.TryGetValue(cacheName, out IEnumerable<ProductResponse> products))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
                 {
@@ -43,7 +43,7 @@ namespace StoreCatalog.Domain.Models.Product
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        products = await response.Content.ReadAsJsonAsync<IEnumerable<IProductResponse>>();
+                        products = await response.Content.ReadAsJsonAsync<IEnumerable<ProductResponse>>();
                     }
 
                     _memoryCache.Set(cacheName, products, cacheOptions);

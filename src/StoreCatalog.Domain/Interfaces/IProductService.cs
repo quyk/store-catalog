@@ -6,6 +6,6 @@ namespace StoreCatalog.Domain.Interfaces
 {
     public interface IProductService
     {
-        Task<IEnumerable<IProductResponse>> GetProductsAsync();
+        Task<IEnumerable<ProductResponse>> GetProductsAsync();
     }
 }

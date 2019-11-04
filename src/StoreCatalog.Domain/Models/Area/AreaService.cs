@@ -19,14 +19,14 @@ namespace StoreCatalog.Domain.Models.Area
             _baseUrl = configuration.GetValue<string>("AreaBaseUrl");
         }
 
-        public async Task<IAreasResponse> GetAreaAsync() 
+        public async Task<AreasResponse> GetAreaAsync() 
         {
             using (var httpClient = _httpClientFactory.CreateClient())
             {
                 var response = await httpClient.GetAsync(_baseUrl);
 
                 if (response.StatusCode == HttpStatusCode.OK)
-                    return await response.Content.ReadAsJsonAsync<IAreasResponse>();
+                    return await response.Content.ReadAsJsonAsync<AreasResponse>();
                 else
                     return null;
             }
