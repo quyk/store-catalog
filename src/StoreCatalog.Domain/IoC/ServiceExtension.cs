@@ -26,10 +26,6 @@ namespace StoreCatalog.Domain.IoC
 
             //TODO: Publicar StoreCatalogReady
 
-            //TODO: Assinar ProductionAreaChanged
-
-            //TODO: Assinar ProductChanged
-
 
             services.AddTransient<IQueueBus, QueueBus>();
             return services;

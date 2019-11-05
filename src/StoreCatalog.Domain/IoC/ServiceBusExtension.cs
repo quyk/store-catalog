@@ -17,7 +17,6 @@ namespace StoreCatalog.Domain.IoC
 
             var receiver = new ReceiverBus(option);
 
-            //Upsert
             await receiver.ReceiverAsync("productchanged", Filter, "StoreCatalog-ProductChanged");
 
             await receiver.ReceiverAsync("productionareachanged", Filter, "StoreCatalog-ProductionAreaChanged");

@@ -32,7 +32,6 @@ namespace StoreCatalog.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .UseServices()
                 .UseOptions(Configuration)                
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -49,7 +48,7 @@ namespace StoreCatalog.Api
                     })
             );
 
-            services.UseServiceBus().GetAwaiter().GetResult();
+            
             services.AddAutoMapper(typeof(AreasModelProfile),
                                    typeof(ProductModelProfile));
 
@@ -69,7 +68,8 @@ namespace StoreCatalog.Api
                 c.SwaggerDoc("v1", new Info { Title = "Store Catalog", Version = "V1" });
             });
 
-            services.UseServices();
+            services.UseServices().GetAwaiter().GetResult();
+            services.UseServiceBus().GetAwaiter().GetResult();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
