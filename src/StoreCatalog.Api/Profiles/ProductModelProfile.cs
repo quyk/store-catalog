@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using GeekBurger.Products.Contract;
-using StoreCatalog.Api.Models;
 using StoreCatalog.Contract.Responses;
 
 namespace StoreCatalog.Api.Profiles
