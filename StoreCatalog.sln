@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreCatalog.Domain", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{3FF38A50-3BE8-4B00-AF1B-D3E73B92ACF6}"
 	ProjectSection(SolutionItems) = preProject
+		geekburgerstorecatalog.PublishSettings = geekburgerstorecatalog.PublishSettings
 		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
