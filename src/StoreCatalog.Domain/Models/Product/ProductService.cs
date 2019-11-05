@@ -1,15 +1,13 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using StoreCatalog.Contract.Responses;
+﻿using GeekBurger.Products.Contract;
+using Microsoft.Extensions.Caching.Memory;
 using StoreCatalog.Domain.Extensions;
 using StoreCatalog.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Linq;
-using GeekBurger.Products.Contract;
 
 namespace StoreCatalog.Domain.Models.Product
 {
@@ -22,7 +20,7 @@ namespace StoreCatalog.Domain.Models.Product
         public ProductService(IHttpClientFactory httpClientFactory,
             IMemoryCache memoryCache)
         {
-            _httpClientFactory = httpClientFactory;            
+            _httpClientFactory = httpClientFactory;
             _memoryCache = memoryCache;
         }
 
