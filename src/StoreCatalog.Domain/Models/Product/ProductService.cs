@@ -15,23 +15,19 @@ namespace StoreCatalog.Domain.Models.Product
 {
     public class ProductService : IProductService
     {
-        private readonly string _baseUrl;
-        private readonly IStoreCatalogClientFactory _httpClientFactory;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
         private readonly string _cacheName = "products";
 
-        public ProductService(IStoreCatalogClientFactory httpClientFactory,
-            IConfiguration configuration,
+        public ProductService(IHttpClientFactory httpClientFactory,
             IMemoryCache memoryCache)
         {
-            _httpClientFactory = httpClientFactory;
-            _baseUrl = configuration.GetValue<string>("ProductBaseUrl");
+            _httpClientFactory = httpClientFactory;            
             _memoryCache = memoryCache;
         }
 
         public async Task<IEnumerable<ProductToGet>> GetProductsAsync()
         {
-
             if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<ProductToGet> products))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
@@ -39,9 +35,9 @@ namespace StoreCatalog.Domain.Models.Product
                     AbsoluteExpiration = DateTime.Now.AddHours(6)
                 };
 
-                using (var httpClient = _httpClientFactory.CreateClient())
+                using (var httpClient = _httpClientFactory.CreateClient("Products"))
                 {
-                    var response = await httpClient.GetAsync($"{_baseUrl}/api/products?storeName=Los%20Angeles%20-%20Pasadena");
+                    var response = await httpClient.GetAsync($"api/products?storeName=Los%20Angeles%20-%20Pasadena");
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {

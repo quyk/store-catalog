@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using StoreCatalog.Api.Models;
 using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Interfaces;
 using System;
