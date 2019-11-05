@@ -15,9 +15,15 @@ namespace StoreCatalog.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -26,6 +32,8 @@ namespace StoreCatalog.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .UseServices()
+                .UseOptions(Configuration)                
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -41,6 +49,7 @@ namespace StoreCatalog.Api
                     })
             );
 
+            services.UseServiceBus().GetAwaiter().GetResult();
             services.AddAutoMapper(typeof(AreasModelProfile),
                                    typeof(ProductModelProfile));
 
@@ -64,13 +73,8 @@ namespace StoreCatalog.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
