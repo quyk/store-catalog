@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StoreCatalog.Api.Models
+namespace StoreCatalog.Domain.Models.Area
 {
     public class AreasModel
     {

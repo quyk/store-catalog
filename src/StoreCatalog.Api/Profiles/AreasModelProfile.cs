@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using StoreCatalog.Api.Models;
 using StoreCatalog.Contract.Responses;
+using StoreCatalog.Domain.Models.Area;
 
 namespace StoreCatalog.Api.Profiles
 {

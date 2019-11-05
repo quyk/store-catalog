@@ -21,7 +21,7 @@ namespace StoreCatalog.Api.Controllers
         }
 
         [HttpGet("areas")]
-        public async Task<ActionResult<AreasModel>> GetAreas()
+        public async Task<ActionResult<AreasResponse>> GetAreas()
         {
             try
             {
