@@ -31,8 +31,7 @@ namespace StoreCatalog.Domain.Models.Product
 
         public async Task<IEnumerable<ProductToGet>> GetProductsAsync()
         {
-
-            if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<ProductToGet> products))
+            if (!_memoryCache.TryGetValue(_cacheName, out Dictionary<Guid, ProductToGet> products))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
                 {
@@ -45,18 +44,32 @@ namespace StoreCatalog.Domain.Models.Product
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        products = await response.Content.ReadAsJsonAsync<IEnumerable<ProductToGet>>();
+                        var productsToGet = await response.Content.ReadAsJsonAsync<IEnumerable<ProductToGet>>();
+
+                        products = productsToGet.ToDictionary(p => p.ProductId, p => p);
                     }
 
                     if (null != products &&
-                        products.Count() > 0)
+                        products.Count > 0)
                     {
                         _memoryCache.Set(_cacheName, products, cacheOptions);
                     }
                 }
             }
 
-            return products;
+            return products.Values;
+        }
+
+        public async Task Upsert(ProductToGet product)
+        {
+            if (!_memoryCache.TryGetValue(_cacheName, out Dictionary<Guid, ProductToGet> products))
+            {
+                products[product.ProductId] = product;
+            }
+            else
+            {
+                await GetProductsAsync();
+            }
         }
     }
 }

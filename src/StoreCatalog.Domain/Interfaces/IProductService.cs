@@ -8,5 +8,7 @@ namespace StoreCatalog.Domain.Interfaces
     public interface IProductService
     {
         Task<IEnumerable<ProductToGet>> GetProductsAsync();
+
+        Task Upsert(ProductToGet product);
     }
 }
