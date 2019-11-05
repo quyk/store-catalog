@@ -10,6 +10,7 @@
     <Description>GeekBurger StoreCatalog Microservice Contract</Description>
     <PackageProjectUrl>https://github.com/quyk/store-catalog</PackageProjectUrl>
     <RepositoryUrl>https://github.com/quyk/store-catalog</RepositoryUrl>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>
