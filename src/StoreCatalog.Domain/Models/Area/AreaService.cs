@@ -28,10 +28,10 @@ namespace StoreCatalog.Domain.Models.Area
             _memoryCache = memoryCache;
         }
 
-        public async Task<IEnumerable<AreasResponse>> GetAreaAsync() 
+        public async Task<IEnumerable<AreasModel>> GetAreaAsync() 
         {
 
-            if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<AreasResponse> areas))
+            if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<AreasModel> areas))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
                 {
@@ -44,7 +44,7 @@ namespace StoreCatalog.Domain.Models.Area
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        areas = await response.Content.ReadAsJsonAsync<IEnumerable<AreasResponse>>();
+                        areas = await response.Content.ReadAsJsonAsync<IEnumerable<AreasModel>>();
                     }
 
                     if (null != areas ||

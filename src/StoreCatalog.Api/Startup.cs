@@ -43,7 +43,7 @@ namespace StoreCatalog.Api
             );
 
             services.AddAutoMapper(typeof(AreasModelProfile),
-                typeof(ProductModelProfile));
+                                   typeof(ProductModelProfile));
 
             services.AddMemoryCache();
 

@@ -23,7 +23,7 @@ namespace StoreCatalog.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ProductModel>> GetProduct()
+        public async Task<ActionResult<ProductResponse>> GetProduct()
         {
             try
             {

@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
+using GeekBurger.Products.Contract;
 
 namespace StoreCatalog.Domain.Models.Product
 {
@@ -17,6 +18,8 @@ namespace StoreCatalog.Domain.Models.Product
         private readonly string _baseUrl;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
+
+        private readonly string _cacheName = "products";
 
         public ProductService(IHttpClientFactory httpClientFactory,
             IConfiguration configuration,
@@ -27,11 +30,10 @@ namespace StoreCatalog.Domain.Models.Product
             _memoryCache = memoryCache;
         }
 
-        public async Task<IEnumerable<ProductResponse>> GetProductsAsync()
+        public async Task<IEnumerable<ProductToGet>> GetProductsAsync()
         {
-            var cacheName = "products";
 
-            if (!_memoryCache.TryGetValue(cacheName, out IEnumerable<ProductResponse> products))
+            if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<ProductToGet> products))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
                 {
@@ -44,13 +46,13 @@ namespace StoreCatalog.Domain.Models.Product
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        products = await response.Content.ReadAsJsonAsync<IEnumerable<ProductResponse>>();
+                        products = await response.Content.ReadAsJsonAsync<IEnumerable<ProductToGet>>();
                     }
 
                     if (null != products &&
                         products.Count() > 0)
                     {
-                        _memoryCache.Set(cacheName, products, cacheOptions);
+                        _memoryCache.Set(_cacheName, products, cacheOptions);
                     }
                 }
             }
