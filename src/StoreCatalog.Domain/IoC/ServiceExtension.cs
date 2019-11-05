@@ -3,6 +3,7 @@ using StoreCatalog.Domain.HttpClientFactory;
 using StoreCatalog.Domain.Interfaces;
 using StoreCatalog.Domain.Models.Area;
 using StoreCatalog.Domain.Models.Product;
+using StoreCatalog.Domain.Models.Store;
 using StoreCatalog.Domain.ServiceBus;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace StoreCatalog.Domain.IoC
             services.AddTransient<IStoreCatalogClientFactory, StoreCatalogClientFactory>();
             services.AddSingleton<IAreaService, AreaService>();
             services.AddSingleton<IProductService, ProductService>();
+            services.AddSingleton<IStoreService, StoreService>();
 
             var serviceprovider = services.BuildServiceProvider();
 
