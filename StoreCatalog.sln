@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreCatalog.Api", "src\Sto
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4BFF1078-F329-4ADC-A2E3-ED6E7E6E7FA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreCatalog.Domain", "src\StoreCatalog.Domain\StoreCatalog.Domain.csproj", "{2666EF82-8D25-4D0B-A194-2886D4C857EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreCatalog.Domain", "src\StoreCatalog.Domain\StoreCatalog.Domain.csproj", "{2666EF82-8D25-4D0B-A194-2886D4C857EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{3FF38A50-3BE8-4B00-AF1B-D3E73B92ACF6}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
