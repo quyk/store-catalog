@@ -18,6 +18,7 @@ namespace StoreCatalog.Domain.Models.Product
         private readonly string _baseUrl;
         private readonly IStoreCatalogClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
+        private readonly string _cacheName = "products";
 
         public ProductService(IStoreCatalogClientFactory httpClientFactory,
             IConfiguration configuration,
