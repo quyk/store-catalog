@@ -15,11 +15,11 @@ namespace StoreCatalog.Domain.Models.Area
     public class AreaService : IAreaService
     {
         private readonly string _baseUrl;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IStoreCatalogClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
         private readonly string _cacheName = "areas";
 
-        public AreaService(IHttpClientFactory httpClientFactory, 
+        public AreaService(IStoreCatalogClientFactory httpClientFactory, 
                            IConfiguration configuration,
                            IMemoryCache memoryCache)
         {

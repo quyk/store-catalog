@@ -12,6 +12,8 @@ using System.Net.Http;
 using System.Net;
 using AutoMapper;
 using StoreCatalog.Api.Profiles;
+using StoreCatalog.Domain.HttpClientFactory;
+using StoreCatalog.Domain.Interfaces;
 
 namespace StoreCatalog.Api
 {
@@ -28,11 +30,10 @@ namespace StoreCatalog.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .UseServices()
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddHttpClient<IHttpClientFactory>().AddPolicyHandler(
+            services.AddHttpClient<IStoreCatalogClientFactory, StoreCatalogClientFactory>().AddPolicyHandler(
                 HttpPolicyExtensions
                     .HandleTransientHttpError()
                     .OrResult(msg => msg.StatusCode == HttpStatusCode.InternalServerError)
@@ -59,6 +60,8 @@ namespace StoreCatalog.Api
             {
                 c.SwaggerDoc("v1", new Info { Title = "Store Catalog", Version = "V1" });
             });
+
+            services.UseServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

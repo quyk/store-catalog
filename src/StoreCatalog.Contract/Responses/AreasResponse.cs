@@ -8,5 +8,7 @@ namespace StoreCatalog.Contract.Responses
         public Guid ProductionId { get; set; }
         public IList<string> Restrictions { get; set; }
         public bool On { get; set; }
+
+        public AreasResponse() { }
     }
 }

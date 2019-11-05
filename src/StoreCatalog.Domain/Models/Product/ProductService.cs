@@ -15,10 +15,10 @@ namespace StoreCatalog.Domain.Models.Product
     public class ProductService : IProductService
     {
         private readonly string _baseUrl;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IStoreCatalogClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
 
-        public ProductService(IHttpClientFactory httpClientFactory,
+        public ProductService(IStoreCatalogClientFactory httpClientFactory,
             IConfiguration configuration,
             IMemoryCache memoryCache)
         {
@@ -40,7 +40,7 @@ namespace StoreCatalog.Domain.Models.Product
 
                 using (var httpClient = _httpClientFactory.CreateClient())
                 {
-                    var response = await httpClient.GetAsync(_baseUrl);
+                    var response = await httpClient.GetAsync($"{_baseUrl}/api/products?storeName=Los%20Angeles%20-%20Pasadena");
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
