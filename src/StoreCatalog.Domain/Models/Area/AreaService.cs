@@ -39,15 +39,14 @@ namespace StoreCatalog.Domain.Models.Area
 
                 using (var httpClient = _httpClientFactory.CreateClient())
                 {
-                    var response = await httpClient.GetAsync(_baseUrl);
+                    var response = await httpClient.GetAsync($"{_baseUrl}/api/production/areas");
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         areas = await response.Content.ReadAsJsonAsync<IEnumerable<AreasModel>>();
                     }
 
-                    if (null != areas ||
-                        areas.Count() > 0)
+                    if (null != areas && areas.Count() > 0)
                     {
                         _memoryCache.Set(_cacheName, areas, cacheOptions);
                     }
