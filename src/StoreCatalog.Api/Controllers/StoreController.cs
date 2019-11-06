@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoreCatalog.Api.Models;
+using StoreCatalog.Contract;
 using StoreCatalog.Domain.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -26,22 +27,28 @@ namespace StoreCatalog.Api.Controllers
         ///     GET - api/store
         /// 
         /// </remarks>
-        /// <returns>A <see cref="StoreModel"/> entity</returns>
+        /// <returns>A <see cref="Ready"/> entity</returns>
         /// <response code="200">Returns a <see cref="StoreModel"/></response>
         /// <response code="404">When none store was found</response>
         /// <response code="400">When some error occours</response>
         [HttpGet]
-        [ProducesResponseType(typeof(StoreModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Ready), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
         public async Task<ActionResult<StoreModel>> GetStore()
         {
-            var store = new StoreModel
+            try
             {
-                StoreId = new Guid("FC7DE87A-741F-4558-93C9-3A14CC3B22E8"),
-                Ready = true
-            };
+                var store = await _storeService.CheckStoreStatus();
 
-            return new OkObjectResult(store);
+                if (store != null)
+                    return Ok(store);
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

@@ -13,9 +13,15 @@ namespace StoreCatalog.Domain.Models.Product
 {
     public class ProductService : IProductService
     {
+        #region "  Properties  "
+
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
         private readonly string _cacheName = "products";
+
+        #endregion
+
+        #region "  Constructor  "
 
         public ProductService(IHttpClientFactory httpClientFactory,
             IMemoryCache memoryCache)
@@ -23,6 +29,10 @@ namespace StoreCatalog.Domain.Models.Product
             _httpClientFactory = httpClientFactory;
             _memoryCache = memoryCache;
         }
+
+        #endregion
+
+        #region "  IProductService  "
 
         public async Task<IEnumerable<ProductToGet>> GetProductsAsync()
         {
@@ -44,8 +54,7 @@ namespace StoreCatalog.Domain.Models.Product
                         products = productsToGet.ToDictionary(p => p.ProductId, p => p);
                     }
 
-                    if (null != products &&
-                        products.Count > 0)
+                    if (null != products && products.Count > 0)
                     {
                         _memoryCache.Set(_cacheName, products, cacheOptions);
                     }
@@ -66,5 +75,7 @@ namespace StoreCatalog.Domain.Models.Product
                 await GetProductsAsync();
             }
         }
+
+        #endregion
     }
 }
