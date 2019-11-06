@@ -28,31 +28,31 @@ namespace StoreCatalog.Domain.Models.Area
             _memoryCache = memoryCache;
         }
 
-        public async Task<IEnumerable<AreasModel>> GetAreaAsync() 
+        public async Task<AreasModel> GetAreaAsync() 
         {
-            if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<AreasModel> areas))
+            if (!_memoryCache.TryGetValue(_cacheName, out AreasModel area))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
                 {
                     AbsoluteExpiration = DateTime.Now.AddHours(6)
                 };
 
-                using (var httpClient = _httpClientFactory.CreateClient())
+                using (var httpClient = _httpClientFactory.CreateClient("Areas"))
                 {
                     var response = await httpClient.GetAsync($"{_baseUrl}/api/production/areas");
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        areas = await response.Content.ReadAsJsonAsync<IEnumerable<AreasModel>>();
+                        area = await response.Content.ReadAsJsonAsync<AreasModel>();
                     }
 
-                    if (null != areas && areas.Count() > 0)
+                    if (null != area)
                     {
-                        _memoryCache.Set(_cacheName, areas, cacheOptions);
+                        _memoryCache.Set(_cacheName, area, cacheOptions);
                     }
                 }
             }
-            return areas;
+            return area;
         }
     }
 }

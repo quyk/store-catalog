@@ -32,12 +32,12 @@ namespace StoreCatalog.Api.Controllers
         ///     GET - api/products
         /// 
         /// </remarks>
-        /// <returns>A list of StoreCatalog.Contract.Responses.ProductResponse</returns>
+        /// <returns>A list of <see cref="ProductResponse"/></returns>
         /// <response code="200">Returns a list of products</response>
         /// <response code="404">When none product was found</response>
         /// <response code="400">When some error occours</response>
         [HttpGet]
-        [ProducesResponseType(typeof(OkObjectResult), StatusCodes.Status200OK)]        
+        [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]        
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
         public async Task<ActionResult<ProductResponse>> GetProduct()
         {

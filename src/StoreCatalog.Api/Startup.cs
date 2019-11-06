@@ -38,18 +38,7 @@ namespace StoreCatalog.Api
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddHttpClient("Products", client =>
-            {
-                client.BaseAddress = new Uri(Configuration.GetValue<string>("ProductBaseUrl"));
-            }).AddPolicyHandler(
-                HttpPolicyExtensions
-                    .HandleTransientHttpError()
-                    .WaitAndRetryAsync(3, retryAttempt =>
-                    {
-                        return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
-                    })
-            );
-
+            services.ConfigureHttpClients(Configuration);
             
             services.AddAutoMapper(typeof(AreasModelProfile),
                                    typeof(ProductModelProfile));

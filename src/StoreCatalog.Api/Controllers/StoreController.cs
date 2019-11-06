@@ -26,12 +26,12 @@ namespace StoreCatalog.Api.Controllers
         ///     GET - api/store
         /// 
         /// </remarks>
-        /// <returns>A StoreModel entity</returns>
-        /// <response code="200">Returns a StoreModel</response>
+        /// <returns>A <see cref="StoreModel"/> entity</returns>
+        /// <response code="200">Returns a <see cref="StoreModel"/></response>
         /// <response code="404">When none store was found</response>
         /// <response code="400">When some error occours</response>
         [HttpGet]
-        [ProducesResponseType(typeof(OkObjectResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StoreModel), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
         public async Task<ActionResult<StoreModel>> GetStore()
         {
