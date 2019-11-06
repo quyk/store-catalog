@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Interfaces;
@@ -10,6 +11,7 @@ namespace StoreCatalog.Api.Controllers
 {
     [Route("api/products")]
     [ApiController]
+    [Produces("application/json")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -21,7 +23,22 @@ namespace StoreCatalog.Api.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Method to retrieve all available products
+        /// </summary>
+        /// <remarks>
+        /// Example:
+        /// 
+        ///     GET - api/products
+        /// 
+        /// </remarks>
+        /// <returns>A list of StoreCatalog.Contract.Responses.ProductResponse</returns>
+        /// <response code="200">Returns a list of products</response>
+        /// <response code="404">When none product was found</response>
+        /// <response code="400">When some error occours</response>
         [HttpGet]
+        [ProducesResponseType(typeof(OkObjectResult), StatusCodes.Status200OK)]        
+        [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
         public async Task<ActionResult<ProductResponse>> GetProduct()
         {
             try

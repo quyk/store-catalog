@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoreCatalog.Api.Models;
 using StoreCatalog.Contract.Responses;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace StoreCatalog.Api.Controllers
 {
     [Route("api/production")]
+    [Produces("application/json")]
     public class ProductionController : Controller
     {
         private readonly IAreaService _areaService;
@@ -20,7 +22,21 @@ namespace StoreCatalog.Api.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Method to retrieve all available areas
+        /// </summary>
+        /// <returns>A AreasResponse entity</returns>
+        /// <remarks>
+        /// 
+        ///     GET - api/production/areas
+        /// 
+        /// </remarks>
+        /// <response code="200">Returns a AreaResponse</response>
+        /// <response code="404">When none area was found</response>
+        /// <response code="400">When some error occours</response>
         [HttpGet("areas")]
+        [ProducesResponseType(typeof(OkObjectResult), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
         public async Task<ActionResult<AreasResponse>> GetAreas()
         {
             try

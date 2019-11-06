@@ -10,6 +10,8 @@ using StoreCatalog.Api.Profiles;
 using StoreCatalog.Domain.IoC;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace StoreCatalog.Api
 {
@@ -65,7 +67,16 @@ namespace StoreCatalog.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Store Catalog", Version = "V1" });
+                c.SwaggerDoc("v1", new Info 
+                { 
+                    Title = "Store Catalog", 
+                    Version = "v1",
+                    Description = "StoreCatalog Microservice from GeekBurger"
+                });
+                
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             services.UseServices();
