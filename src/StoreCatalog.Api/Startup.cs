@@ -68,7 +68,8 @@ namespace StoreCatalog.Api
                 c.SwaggerDoc("v1", new Info { Title = "Store Catalog", Version = "V1" });
             });
 
-            services.UseServices().GetAwaiter().GetResult();
+            services.UseServices();
+            services.UseStart().GetAwaiter().GetResult();
             services.UseServiceBus().GetAwaiter().GetResult();
         }
 

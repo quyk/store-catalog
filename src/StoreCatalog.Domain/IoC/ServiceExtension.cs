@@ -5,29 +5,17 @@ using StoreCatalog.Domain.Models.Area;
 using StoreCatalog.Domain.Models.Product;
 using StoreCatalog.Domain.Models.Store;
 using StoreCatalog.Domain.ServiceBus;
-using System.Threading.Tasks;
 
 namespace StoreCatalog.Domain.IoC
 {
     public static class ServiceExtension
     {
-        public async static Task<IServiceCollection> UseServices(this IServiceCollection services)
+        public static IServiceCollection UseServices(this IServiceCollection services)
         {
             services.AddTransient<IStoreCatalogClientFactory, StoreCatalogClientFactory>();
             services.AddSingleton<IAreaService, AreaService>();
             services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<IStoreService, StoreService>();
-
-            var serviceprovider = services.BuildServiceProvider();
-
-            var productService = serviceprovider.GetService<ProductService>();
-            var areaService = serviceprovider.GetService<AreaService>();
-
-            await productService.GetProductsAsync();
-            await areaService.GetAreaAsync();
-
-            //TODO: Publicar StoreCatalogReady
-
 
             services.AddTransient<IQueueBus, QueueBus>();
             return services;

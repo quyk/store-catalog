@@ -30,7 +30,6 @@ namespace StoreCatalog.Domain.Models.Area
 
         public async Task<IEnumerable<AreasModel>> GetAreaAsync() 
         {
-
             if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<AreasModel> areas))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
@@ -54,9 +53,7 @@ namespace StoreCatalog.Domain.Models.Area
                     }
                 }
             }
-
             return areas;
-
         }
     }
 }

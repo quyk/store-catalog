@@ -8,18 +8,17 @@ namespace StoreCatalog.Domain.IoC
 {
     public static class ServiceBusExtension
     {
-        const string Filter = "LOS ANGELES - PASADENA";
-
         public static async Task<IServiceCollection> UseServiceBus(this IServiceCollection services)
         {
             var serviceProvider = services.BuildServiceProvider();
             var option = serviceProvider.GetService<IOptions<ServiceBusOption>>();
+            var sb = option.Value;
 
-            var receiver = new ReceiverBus(option);
+            var receiver = new ReceiverBus(sb);
 
-            await receiver.ReceiverAsync("productchanged", Filter, "StoreCatalog-ProductChanged");
+            await receiver.ReceiverAsync(sb.ServiceBus.Product.Topic, sb.ServiceBus.Store, sb.ServiceBus.Product.Subscription);
 
-            await receiver.ReceiverAsync("productionareachanged", Filter, "StoreCatalog-ProductionAreaChanged");
+            await receiver.ReceiverAsync(sb.ServiceBus.ProductionArea.Topic, sb.ServiceBus.Store, sb.ServiceBus.ProductionArea.Subscription);
 
             return services;
         }

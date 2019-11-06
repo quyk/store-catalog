@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Options;
 using StoreCatalog.Domain.Suports.Options;
 using System;
 using System.Text;
@@ -12,9 +11,9 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
     {
         private readonly ServiceBusOption _option;
 
-        public ReceiverBus(IOptions<ServiceBusOption> option)
+        public ReceiverBus(ServiceBusOption option)
         {
-            _option = option.Value;
+            _option = option;
         }
 
         public async Task ReceiverAsync(string topicName, string filter, string subscription)
@@ -45,8 +44,6 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
 
             Console.WriteLine("Message Received");
             Console.WriteLine(productChangesString);
-
-            //Thread.Sleep(40000);
 
             return Task.CompletedTask;
         }
