@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Interfaces;
+using StoreCatalog.Domain.ServiceBus.Topic;
+using StoreCatalog.Domain.Suports.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,7 +20,10 @@ namespace StoreCatalog.Api.Controllers
         private readonly IProductService _productService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, IMapper mapper)
+        public ProductController(IProductService productService, 
+                                 IMapper mapper,
+                                 ITopicBus topicBus,
+                                 IOptions<ServiceBusOption> option)
         {
             _productService = productService;
             _mapper = mapper;
