@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
-using Polly.Extensions.Http;
 using StoreCatalog.Api.Profiles;
 using StoreCatalog.Domain.IoC;
 using Swashbuckle.AspNetCore.Swagger;
@@ -34,12 +32,12 @@ namespace StoreCatalog.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .UseOptions(Configuration)                
+                .UseOptions(Configuration)
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.ConfigureHttpClients(Configuration);
-            
+
             services.AddAutoMapper(typeof(AreasModelProfile),
                                    typeof(ProductModelProfile));
 
@@ -56,13 +54,13 @@ namespace StoreCatalog.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info 
-                { 
-                    Title = "Store Catalog", 
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "Store Catalog",
                     Version = "v1",
                     Description = "StoreCatalog Microservice from GeekBurger"
                 });
-                
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
