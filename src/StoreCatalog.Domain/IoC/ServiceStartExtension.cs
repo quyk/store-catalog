@@ -10,11 +10,12 @@ namespace StoreCatalog.Domain.IoC
         {
             var serviceprovider = services.BuildServiceProvider();
 
-            var productService = serviceprovider.GetService<IProductService>();
-            var areaService = serviceprovider.GetService<IAreaService>();
+            var storeService = serviceprovider.GetService<IStoreService>();
 
-            await productService.GetProductsAsync();
-            await areaService.GetAreaAsync();
+            var store = await storeService.CheckStoreStatus();
+
+            //if (store != null)
+                //TODO publicar no tópico StoreCatalogReady
         }
     }
 }
