@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using StoreCatalog.Domain.Enuns;
+using System.Threading.Tasks;
 
 namespace StoreCatalog.Domain.ServiceBus.Receiver
 {
     interface IReceiverBus
     {
-        Task ReceiverAsync(string topicName, string filter, string subscription);
+        Task ReceiverAsync(string topicName, string filter, string subscription, TopicType type);
     }
 }

@@ -1,7 +1,14 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿using GeekBurger.Products.Contract;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using StoreCatalog.Domain.Enuns;
+using StoreCatalog.Domain.Interfaces;
+using StoreCatalog.Domain.Models.Area;
+using StoreCatalog.Domain.ServiceBus.Topic;
 using StoreCatalog.Domain.Suports.Options;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,12 +18,22 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
 {
     public class ReceiverBus : IReceiverBus
     {
+        private readonly IProductService _product;
+        private readonly IAreaService _area;
+        private readonly ITopicBus _topicBus;
         private readonly ServiceBusOption _option;
         private readonly RuleDescription _rule;
 
-        public ReceiverBus(ServiceBusOption option)
+        public ReceiverBus(
+            IProductService product,
+            IAreaService area,
+            ITopicBus topicBus,
+            IOptions<ServiceBusOption> option)
         {
-            _option = option;
+            _product = product;
+            _area = area;
+            _option = option.Value;
+            _topicBus = topicBus;
             _rule = new RuleDescription
             {
                 Filter = new CorrelationFilter { Label = _option.ServiceBus.Store },
@@ -24,7 +41,7 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             };
         }
 
-        public async Task ReceiverAsync(string topic, string filter, string subscription)
+        public async Task ReceiverAsync(string topic, string filter, string subscription, TopicType type)
         {
             await CreateTopicAsync(_option.ConnectionString, topic);
             await CreateSubscriptionAsync(_option.ConnectionString, topic, subscription);
@@ -50,26 +67,61 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
                 AutoComplete = false
             };
 
-            subscriptionClient.RegisterMessageHandler(Handle, mo);            
+            if (type == TopicType.Product)
+            {
+                subscriptionClient.RegisterMessageHandler(HandleProduct, mo);
+            }
+            else
+            {
+                subscriptionClient.RegisterMessageHandler(HandleArea, mo);
+            }
         }
 
-        private static Task Handle(Message message, CancellationToken arg2)
+        private Task HandleProduct(Message message, CancellationToken arg2)
         {
-            Console.WriteLine($"message Label: {message.Label}");
-            Console.WriteLine($"message CorrelationId: {message.CorrelationId}");
-            var productChangesString = Encoding.UTF8.GetString(message.Body);
+            var logs = new List<string>
+            {
+                $"message Label: {message.Label}",
+                $"message CorrelationId: {message.CorrelationId}"
+            };
 
-            Console.WriteLine("Message Received");
-            Console.WriteLine(productChangesString);
+            var json = Encoding.UTF8.GetString(message.Body);
+            var product = JsonConvert.DeserializeObject<ProductToGet>(json);
+            _product.Upsert(product);
 
+            logs.Add($"Message Received");
+
+            _topicBus.SendAsyn(_option.ServiceBus.TopicLog, logs);
             return Task.CompletedTask;
         }
 
-        private static Task ExceptionHandle(ExceptionReceivedEventArgs arg)
+        private Task HandleArea(Message message, CancellationToken arg2)
         {
-            Console.WriteLine($"Message handler encountered an exception {arg.Exception}.");
+            var logs = new List<string>
+            {
+                $"message Label: {message.Label}",
+                $"message CorrelationId: {message.CorrelationId}"
+            };
+
+            var json = Encoding.UTF8.GetString(message.Body);
+            var area = JsonConvert.DeserializeObject<AreasModel>(json);
+            _area.Upsert(area);
+
+            logs.Add($"Message Received");
+            _topicBus.SendAsyn(_option.ServiceBus.TopicLog, logs);
+            return Task.CompletedTask;
+        }
+
+        private Task ExceptionHandle(ExceptionReceivedEventArgs arg)
+        {
+            var logs = new List<string>
+            {
+                $"Message handler encountered an exception {arg.Exception}"
+            };
             var context = arg.ExceptionReceivedContext;
-            Console.WriteLine($"- Endpoint: {context.Endpoint}, Path: {context.EntityPath}, Action: {context.Action}");
+            logs.Add($"- Endpoint: {context.Endpoint}, Path: {context.EntityPath}, Action: {context.Action}");
+            _topicBus.SendAsyn(_option.ServiceBus.TopicLog, logs);
+
             return Task.CompletedTask;
         }
 
@@ -79,6 +131,7 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             if (!await client.TopicExistsAsync(topic))
             {
                 await client.CreateTopicAsync(topic);
+                await _topicBus.SendAsyn(_option.ServiceBus.TopicLog, $"Create Topic {topic}");
             }
         }
 
@@ -89,6 +142,8 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             {
                 await client.CreateSubscriptionAsync(topic, subscription);
                 await client.CreateRuleAsync(topic, subscription, _rule);
+
+                await _topicBus.SendAsyn(_option.ServiceBus.TopicLog, $"Create Subscription {topic}");
             }
         }
     }

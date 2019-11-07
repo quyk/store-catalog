@@ -6,6 +6,8 @@ using StoreCatalog.Domain.Models.Area;
 using StoreCatalog.Domain.Models.Product;
 using StoreCatalog.Domain.Models.Store;
 using StoreCatalog.Domain.ServiceBus;
+using StoreCatalog.Domain.ServiceBus.Receiver;
+using StoreCatalog.Domain.ServiceBus.Topic;
 using System;
 
 namespace StoreCatalog.Domain.IoC
@@ -27,7 +29,9 @@ namespace StoreCatalog.Domain.IoC
             services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<IStoreService, StoreService>();
 
+            services.AddTransient<IReceiverBus, ReceiverBus>();
             services.AddTransient<IQueueBus, QueueBus>();
+            services.AddTransient<ITopicBus, TopicBus>();
             return services;
         }
 

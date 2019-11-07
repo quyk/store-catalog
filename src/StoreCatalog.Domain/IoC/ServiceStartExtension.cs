@@ -12,7 +12,7 @@ namespace StoreCatalog.Domain.IoC
 
             var storeService = serviceprovider.GetService<IStoreService>();
 
-            var store = await storeService.CheckStoreStatus();
+            //var store = await storeService.CheckStoreStatus();
 
             //if (store != null)
                 //TODO publicar no tópico StoreCatalogReady
