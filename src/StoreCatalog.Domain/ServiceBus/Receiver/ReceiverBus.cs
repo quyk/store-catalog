@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.ServiceBus;
+using Microsoft.Azure.ServiceBus.Management;
 using StoreCatalog.Domain.Suports.Options;
 using System;
 using System.Linq;
@@ -11,15 +12,24 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
     public class ReceiverBus : IReceiverBus
     {
         private readonly ServiceBusOption _option;
+        private readonly RuleDescription _rule;
 
         public ReceiverBus(ServiceBusOption option)
         {
             _option = option;
+            _rule = new RuleDescription
+            {
+                Filter = new CorrelationFilter { Label = _option.ServiceBus.Store },
+                Name = "filter-store"
+            };
         }
 
-        public async Task ReceiverAsync(string topicName, string filter, string subscription)
+        public async Task ReceiverAsync(string topic, string filter, string subscription)
         {
-            var subscriptionClient = new SubscriptionClient(_option.ConnectionString, topicName, subscription);
+            await CreateTopicAsync(_option.ConnectionString, topic);
+            await CreateSubscriptionAsync(_option.ConnectionString, topic, subscription);
+
+            var subscriptionClient = new SubscriptionClient(_option.ConnectionString, topic, subscription);
 
             var rules = await subscriptionClient.GetRulesAsync();
 
@@ -31,14 +41,14 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
 
             if (!rules.Any(r => r.Name.Equals("filter-store")))
             {
-                await subscriptionClient.AddRuleAsync(new RuleDescription
-                {
-                    Filter = new CorrelationFilter { Label = filter },
-                    Name = "filter-store"
-                });
+                await subscriptionClient.AddRuleAsync(_rule);
             }
 
-            var mo = new MessageHandlerOptions(ExceptionHandle) { AutoComplete = true };
+            var mo = new MessageHandlerOptions(ExceptionHandle)
+            {
+                MaxConcurrentCalls = 5,
+                AutoComplete = false
+            };
 
             subscriptionClient.RegisterMessageHandler(Handle, mo);            
         }
@@ -61,6 +71,25 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             var context = arg.ExceptionReceivedContext;
             Console.WriteLine($"- Endpoint: {context.Endpoint}, Path: {context.EntityPath}, Action: {context.Action}");
             return Task.CompletedTask;
+        }
+
+        private async Task CreateTopicAsync(string connectionString, string topic)
+        {
+            var client = new ManagementClient(connectionString);
+            if (!await client.TopicExistsAsync(topic))
+            {
+                await client.CreateTopicAsync(topic);
+            }
+        }
+
+        private async Task CreateSubscriptionAsync(string connectionString, string topic, string subscription)
+        {
+            var client = new ManagementClient(connectionString);
+            if(!await client.SubscriptionExistsAsync(topic, subscription))
+            {
+                await client.CreateSubscriptionAsync(topic, subscription);
+                await client.CreateRuleAsync(topic, subscription, _rule);
+            }
         }
     }
 }
