@@ -28,7 +28,7 @@ namespace StoreCatalog.Api.Controllers
         /// 
         /// </remarks>
         /// <returns>A <see cref="Ready"/> entity</returns>
-        /// <response code="200">Returns a <see cref="StoreModel"/></response>
+        /// <response code="200">Returns a <see cref="Ready"/></response>
         /// <response code="404">When none store was found</response>
         /// <response code="400">When some error occours</response>
         [HttpGet]
