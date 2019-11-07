@@ -1,25 +1,27 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Extensions;
 using StoreCatalog.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace StoreCatalog.Domain.Models.Area
 {
     public class AreaService : IAreaService
     {
+        #region "  Properties  "
+
         private readonly string _baseUrl;
+        private readonly string _cacheName = "areas";
         private readonly IStoreCatalogClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
-        private readonly string _cacheName = "areas";
 
-        public AreaService(IStoreCatalogClientFactory httpClientFactory, 
+        #endregion
+
+        #region "  Constructor  "
+
+        public AreaService(IStoreCatalogClientFactory httpClientFactory,
                            IConfiguration configuration,
                            IMemoryCache memoryCache)
         {
@@ -28,31 +30,38 @@ namespace StoreCatalog.Domain.Models.Area
             _memoryCache = memoryCache;
         }
 
-        public async Task<IEnumerable<AreasModel>> GetAreaAsync() 
+        #endregion
+
+        #region "  IAreaService  "
+
+        public async Task<AreasModel> GetAreaAsync()
         {
-            if (!_memoryCache.TryGetValue(_cacheName, out IEnumerable<AreasModel> areas))
+            if (!_memoryCache.TryGetValue(_cacheName, out AreasModel area))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
                 {
                     AbsoluteExpiration = DateTime.Now.AddHours(6)
                 };
 
-                using (var httpClient = _httpClientFactory.CreateClient())
+                using (var httpClient = _httpClientFactory.CreateClient("Areas"))
                 {
                     var response = await httpClient.GetAsync($"{_baseUrl}/api/production/areas");
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        areas = await response.Content.ReadAsJsonAsync<IEnumerable<AreasModel>>();
+                        area = await response.Content.ReadAsJsonAsync<AreasModel>();
                     }
 
-                    if (null != areas && areas.Count() > 0)
+                    if (null != area)
                     {
-                        _memoryCache.Set(_cacheName, areas, cacheOptions);
+                        _memoryCache.Set(_cacheName, area, cacheOptions);
                     }
                 }
             }
-            return areas;
+
+            return area;
         }
+
+        #endregion
     }
 }

@@ -2,7 +2,7 @@
 using GeekBurger.Products.Contract;
 using StoreCatalog.Contract.Responses;
 
-namespace StoreCatalog.Api.Profiles
+namespace StoreCatalog.Domain.Profiles
 {
     public class ItemProfile : Profile
     {

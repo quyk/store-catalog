@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StoreCatalog.Api.Models;
 using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Interfaces;
 using System;
@@ -31,11 +30,11 @@ namespace StoreCatalog.Api.Controllers
         ///     GET - api/production/areas
         /// 
         /// </remarks>
-        /// <response code="200">Returns a AreaResponse</response>
+        /// <response code="200">Returns a <see cref="AreasResponse"/></response>
         /// <response code="404">When none area was found</response>
         /// <response code="400">When some error occours</response>
         [HttpGet("areas")]
-        [ProducesResponseType(typeof(OkObjectResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AreasResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
         public async Task<ActionResult<AreasResponse>> GetAreas()
         {
