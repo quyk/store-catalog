@@ -10,10 +10,10 @@ namespace StoreCatalog.Domain.Interfaces
     public interface IAreaService
     {
         /// <summary>
-        /// Retrieve all available <see cref="AreasModel"/>
+        /// Retrieve a available <see cref="AreasModel"/>
         /// </summary>
-        /// <returns>A IEnumerable of AreasModel</returns>
-        Task<IEnumerable<AreasModel>> GetAreaAsync();
+        /// <returns>A AreasModel</returns>
+        Task<AreasModel> GetAreaAsync();
 
         /// <summary>
         /// Update a <see cref="AreasModel"/> record

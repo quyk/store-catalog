@@ -3,8 +3,6 @@ using Microsoft.Extensions.Configuration;
 using StoreCatalog.Domain.Extensions;
 using StoreCatalog.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -36,9 +34,9 @@ namespace StoreCatalog.Domain.Models.Area
 
         #region "  IAreaService  "
 
-        public async Task<IEnumerable<AreasModel>> GetAreaAsync()
+        public async Task<AreasModel> GetAreaAsync()
         {
-            if (!_memoryCache.TryGetValue(_cacheName, out Dictionary<Guid, AreasModel> areas))
+            if (!_memoryCache.TryGetValue(_cacheName, out AreasModel area))
             {
                 var cacheOptions = new MemoryCacheEntryOptions()
                 {
@@ -51,27 +49,25 @@ namespace StoreCatalog.Domain.Models.Area
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        var areasToGet = await response.Content.ReadAsJsonAsync<IEnumerable<AreasModel>>();
-
-                        areas = areasToGet.ToDictionary(a => a.ProductionId, a => a);
+                        area = await response.Content.ReadAsJsonAsync<AreasModel>();
                     }
 
-                    if (null != areas)
+                    if (null != area)
                     {
-                        _memoryCache.Set(_cacheName, areas, cacheOptions);
+                        _memoryCache.Set(_cacheName, area, cacheOptions);
                     }
                 }
             }
 
-            return areas.Values;
+            return area;
         }
 
 
         public async Task Upsert(AreasModel area)
         {
-            if (!_memoryCache.TryGetValue(_cacheName, out Dictionary<Guid, AreasModel> areas))
+            if (_memoryCache.TryGetValue(_cacheName, out AreasModel _))
             {
-                areas[area.ProductionId] = area;
+                _memoryCache.Set(_cacheName, area);
             }
             else
             {
