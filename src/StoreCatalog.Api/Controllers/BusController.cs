@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using StoreCatalog.Api.Models;
 using StoreCatalog.Domain.ServiceBus;
+using StoreCatalog.Domain.ServiceBus.Topic;
+using StoreCatalog.Domain.Suports.Options;
 using System.Threading.Tasks;
 
 namespace StoreCatalog.Api.Controllers
@@ -11,7 +14,9 @@ namespace StoreCatalog.Api.Controllers
     {
         private readonly IQueueBus _queueBus;
 
-        public BusController(IQueueBus queueBus)
+        public BusController(IQueueBus queueBus,
+                             ITopicBus topicBus,
+                             IOptions<ServiceBusOption> option)
         {
             _queueBus = queueBus;
         }

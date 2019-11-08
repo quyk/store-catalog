@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using StoreCatalog.Api.Models;
 using StoreCatalog.Contract;
 using StoreCatalog.Domain.Interfaces;
+using StoreCatalog.Domain.ServiceBus.Topic;
+using StoreCatalog.Domain.Suports.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -12,10 +16,16 @@ namespace StoreCatalog.Api.Controllers
     public class StoreController : ControllerBase
     {
         private readonly IStoreService _storeService;
+        private readonly ITopicBus _topicBus;
+        private readonly IOptions<ServiceBusOption> _option;
 
-        public StoreController(IStoreService storeService)
+        public StoreController(IStoreService storeService,
+                               ITopicBus topicBus,
+                               IOptions<ServiceBusOption> option)
         {
             _storeService = storeService;
+            _topicBus = topicBus;
+            _option = option;
         }
 
         /// <summary>
@@ -37,6 +47,8 @@ namespace StoreCatalog.Api.Controllers
         {
             try
             {
+                await _topicBus.SendAsyn(_option.Value.ServiceBus.TopicLog, "Calling Get Store..");
+
                 var store = await _storeService.CheckStoreStatus();
 
                 if (store != null)
@@ -46,7 +58,12 @@ namespace StoreCatalog.Api.Controllers
             }
             catch (Exception ex)
             {
+                await _topicBus.SendAsyn(_option.Value.ServiceBus.TopicLog, ex.ToString());
                 return BadRequest(ex);
+            }
+            finally
+            {
+                await _topicBus.SendAsyn(_option.Value.ServiceBus.TopicLog, "Returning Get Store..");
             }
         }
     }
