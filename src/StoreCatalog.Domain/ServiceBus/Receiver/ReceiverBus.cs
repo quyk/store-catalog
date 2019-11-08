@@ -18,11 +18,17 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
 {
     public class ReceiverBus : IReceiverBus
     {
+        #region "  Properties  "
+
         private readonly IProductService _product;
         private readonly IAreaService _area;
         private readonly ITopicBus _topicBus;
         private readonly ServiceBusOption _option;
         private readonly RuleDescription _rule;
+
+        #endregion
+
+        #region "  Constructor  "
 
         public ReceiverBus(
             IProductService product,
@@ -40,6 +46,10 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
                 Name = "filter-store"
             };
         }
+
+        #endregion
+
+        #region "  IReceiverBus  "
 
         public async Task ReceiverAsync(string topic, string filter, string subscription, TopicType type)
         {
@@ -77,6 +87,10 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             }
         }
 
+        #endregion
+
+        #region "  Private Methods  "
+
         private Task HandleProduct(Message message, CancellationToken arg2)
         {
             var logs = new List<string>
@@ -91,7 +105,7 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
 
             logs.Add($"Message Received");
 
-            _topicBus.SendAsyn(_option.ServiceBus.TopicLog, logs);
+            _topicBus.SendAsync(_option.ServiceBus.TopicLog, logs);
             return Task.CompletedTask;
         }
 
@@ -108,7 +122,7 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             _area.Upsert(area);
 
             logs.Add($"Message Received");
-            _topicBus.SendAsyn(_option.ServiceBus.TopicLog, logs);
+            _topicBus.SendAsync(_option.ServiceBus.TopicLog, logs);
             return Task.CompletedTask;
         }
 
@@ -120,7 +134,7 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             };
             var context = arg.ExceptionReceivedContext;
             logs.Add($"- Endpoint: {context.Endpoint}, Path: {context.EntityPath}, Action: {context.Action}");
-            _topicBus.SendAsyn(_option.ServiceBus.TopicLog, logs);
+            _topicBus.SendAsync(_option.ServiceBus.TopicLog, logs);
 
             return Task.CompletedTask;
         }
@@ -131,20 +145,22 @@ namespace StoreCatalog.Domain.ServiceBus.Receiver
             if (!await client.TopicExistsAsync(topic))
             {
                 await client.CreateTopicAsync(topic);
-                await _topicBus.SendAsyn(_option.ServiceBus.TopicLog, $"Create Topic {topic}");
+                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, $"Create Topic {topic}");
             }
         }
 
         private async Task CreateSubscriptionAsync(string connectionString, string topic, string subscription)
         {
             var client = new ManagementClient(connectionString);
-            if(!await client.SubscriptionExistsAsync(topic, subscription))
+            if (!await client.SubscriptionExistsAsync(topic, subscription))
             {
                 await client.CreateSubscriptionAsync(topic, subscription);
                 await client.CreateRuleAsync(topic, subscription, _rule);
 
-                await _topicBus.SendAsyn(_option.ServiceBus.TopicLog, $"Create Subscription {topic}");
+                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, $"Create Subscription {topic}");
             }
         }
+
+        #endregion
     }
 }

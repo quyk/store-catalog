@@ -32,6 +32,7 @@ namespace StoreCatalog.Api.Controllers
         /// Retrieve Store status
         /// </summary>
         /// <remarks>
+        /// Example:
         /// 
         ///     GET - api/store
         /// 
@@ -47,7 +48,7 @@ namespace StoreCatalog.Api.Controllers
         {
             try
             {
-                await _topicBus.SendAsyn(_option.Value.ServiceBus.TopicLog, "Calling Get Store..");
+                await _topicBus.SendAsync(_option.Value.ServiceBus.TopicLog, "Calling Get Store..");
 
                 var store = await _storeService.CheckStoreStatus();
 
@@ -58,12 +59,12 @@ namespace StoreCatalog.Api.Controllers
             }
             catch (Exception ex)
             {
-                await _topicBus.SendAsyn(_option.Value.ServiceBus.TopicLog, ex.ToString());
+                await _topicBus.SendAsync(_option.Value.ServiceBus.TopicLog, ex.ToString());
                 return BadRequest(ex);
             }
             finally
             {
-                await _topicBus.SendAsyn(_option.Value.ServiceBus.TopicLog, "Returning Get Store..");
+                await _topicBus.SendAsync(_option.Value.ServiceBus.TopicLog, "Returning Get Store..");
             }
         }
     }

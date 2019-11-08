@@ -32,6 +32,7 @@ namespace StoreCatalog.Api.Controllers
         /// </summary>
         /// <returns>A AreasResponse entity</returns>
         /// <remarks>
+        /// Example:
         /// 
         ///     GET - api/production/areas
         /// 
