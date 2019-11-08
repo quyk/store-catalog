@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StoreCatalog.Api.Models;
 using StoreCatalog.Contract;
 using StoreCatalog.Domain.Interfaces;
 using System;
@@ -20,7 +19,7 @@ namespace StoreCatalog.Api.Controllers
         }
 
         /// <summary>
-        /// Method to retrieve Store status
+        /// Retrieve Store status
         /// </summary>
         /// <remarks>
         /// 
@@ -34,7 +33,7 @@ namespace StoreCatalog.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Ready), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<ActionResult<StoreModel>> GetStore()
+        public async Task<ActionResult<Ready>> GetStore()
         {
             try
             {

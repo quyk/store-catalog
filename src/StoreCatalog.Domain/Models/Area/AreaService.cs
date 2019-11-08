@@ -78,6 +78,7 @@ namespace StoreCatalog.Domain.Models.Area
                 await GetAreaAsync();
             }
         }
+
         #endregion
     }
 }

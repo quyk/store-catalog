@@ -11,7 +11,7 @@ namespace StoreCatalog.Domain.IoC
     public static class PollyExtensions
     {
         /// <summary>
-        /// Method to configure a unique Policy Retry
+        /// Configure a unique Policy Retry
         /// </summary>
         /// <returns>A IAsyncPolicy<HttpResponseMessage> object with Policy defined</returns>
         public static IAsyncPolicy<HttpResponseMessage> ConfigurePolicy()

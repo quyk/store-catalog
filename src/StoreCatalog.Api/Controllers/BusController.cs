@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace StoreCatalog.Api.Controllers
 {
     [Route("api/store")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BusController : Controller
     {
         private readonly IQueueBus _queueBus;

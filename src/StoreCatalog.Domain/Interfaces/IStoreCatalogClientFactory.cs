@@ -2,7 +2,8 @@
 
 namespace StoreCatalog.Domain.Interfaces
 {
-    public interface IStoreCatalogClientFactory : IHttpClientFactory
-    {
-    }
+    /// <summary>
+    /// Interface to implement IHttpClientFactory and use on D.I
+    /// </summary>
+    public interface IStoreCatalogClientFactory : IHttpClientFactory { }
 }

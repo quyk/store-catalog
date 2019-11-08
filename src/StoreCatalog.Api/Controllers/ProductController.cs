@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreCatalog.Api.Models;
+using StoreCatalog.Contract.Requests;
 using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Interfaces;
 using System;
@@ -24,7 +26,7 @@ namespace StoreCatalog.Api.Controllers
         }
 
         /// <summary>
-        /// Method to retrieve all available products
+        /// Retrieve all available products
         /// </summary>
         /// <remarks>
         /// Example:
@@ -39,11 +41,11 @@ namespace StoreCatalog.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]        
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<ActionResult<ProductResponse>> GetProduct()
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProduct([FromQuery] ProductRequest productRequest)
         {
             try
             {
-                var products = await _productService.GetProductsAsync();
+                var products = await _productService.GetProductsAsync(productRequest);
 
                 if (products != null)
                     return Ok(_mapper.Map<IEnumerable<ProductResponse>>(products));

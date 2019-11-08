@@ -8,7 +8,7 @@ namespace StoreCatalog.Domain.Interfaces
         /// <summary>
         /// Check if Store has Areas and Products
         /// </summary>
-        /// <returns>Ready entity</returns>
+        /// <returns><see cref="Ready"/></returns>
         Task<Ready> CheckStoreStatus();
     }
 }

@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using StoreCatalog.Domain.Enuns;
-using StoreCatalog.Domain.Interfaces;
+using StoreCatalog.Domain.Enums;
 using StoreCatalog.Domain.ServiceBus.Receiver;
-using StoreCatalog.Domain.ServiceBus.Topic;
 using StoreCatalog.Domain.Suports.Options;
 using System.Threading.Tasks;
 
@@ -17,7 +15,7 @@ namespace StoreCatalog.Domain.IoC
             var receiver = serviceProvider.GetService<IReceiverBus>();
 
             var option = serviceProvider.GetService<IOptions<ServiceBusOption>>();
-            var sb = option.Value;           
+            var sb = option.Value;
 
             await receiver.ReceiverAsync(sb.ServiceBus.Product.Topic, sb.ServiceBus.Store, sb.ServiceBus.Product.Subscription, TopicType.Product);
             await receiver.ReceiverAsync(sb.ServiceBus.ProductionArea.Topic, sb.ServiceBus.Store, sb.ServiceBus.ProductionArea.Subscription, TopicType.ProductionArea);

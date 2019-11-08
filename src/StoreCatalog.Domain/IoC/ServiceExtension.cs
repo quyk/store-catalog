@@ -53,6 +53,11 @@ namespace StoreCatalog.Domain.IoC
                 client.BaseAddress = new Uri(configuration.GetValue<string>("AreaBaseUrl"));
             }).AddPolicyHandler(PollyExtensions.ConfigurePolicy());
 
+            services.AddHttpClient("Ingredients", client =>
+            {
+                client.BaseAddress = new Uri(configuration.GetValue<string>("IngredientsUrl"));
+            }).AddPolicyHandler(PollyExtensions.ConfigurePolicy());
+
             return services;
         }
     }

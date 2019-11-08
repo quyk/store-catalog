@@ -22,7 +22,7 @@ namespace StoreCatalog.Api.Controllers
         }
 
         /// <summary>
-        /// Method to retrieve all available areas
+        /// Retrieve all available areas
         /// </summary>
         /// <returns>A AreasResponse entity</returns>
         /// <remarks>

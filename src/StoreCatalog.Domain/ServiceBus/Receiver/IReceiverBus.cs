@@ -1,4 +1,4 @@
-﻿using StoreCatalog.Domain.Enuns;
+﻿using StoreCatalog.Domain.Enums;
 using System.Threading.Tasks;
 
 namespace StoreCatalog.Domain.ServiceBus.Receiver

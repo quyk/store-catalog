@@ -1,5 +1,6 @@
 ﻿using GeekBurger.Products.Contract;
 using Microsoft.Extensions.Caching.Memory;
+using StoreCatalog.Contract.Requests;
 using StoreCatalog.Domain.Extensions;
 using StoreCatalog.Domain.Interfaces;
 using System;
@@ -34,18 +35,18 @@ namespace StoreCatalog.Domain.Models.Product
 
         #region "  IProductService  "
 
-        public async Task<IEnumerable<ProductToGet>> GetProductsAsync()
+        public async Task<IEnumerable<ProductToGet>> GetProductsAsync(ProductRequest productRequest)
         {
+            var cacheOptions = new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpiration = DateTime.Now.AddHours(6)
+            };
+
             if (!_memoryCache.TryGetValue(_cacheName, out Dictionary<Guid, ProductToGet> products))
             {
-                var cacheOptions = new MemoryCacheEntryOptions()
-                {
-                    AbsoluteExpiration = DateTime.Now.AddHours(6)
-                };
-
                 using (var httpClient = _httpClientFactory.CreateClient("Products"))
                 {
-                    var response = await httpClient.GetAsync($"api/products?storeName=Los%20Angeles%20-%20Pasadena");
+                    var response = await httpClient.GetAsync($"api/products?storeName={productRequest.StoreName}");
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
@@ -61,6 +62,39 @@ namespace StoreCatalog.Domain.Models.Product
                 }
             }
 
+            if (productRequest.Restrictions?.Count > 0)
+            {
+                using (var httpClient = _httpClientFactory.CreateClient("Ingredients"))
+                {
+                    var storeId = products.Values.FirstOrDefault().StoreId;
+
+                    var restrictionsParameters = string.Empty;
+
+                    foreach (var restriction in productRequest.Restrictions)
+                    {
+                        restrictionsParameters += $"&Restrictions={restriction}";
+                    }
+
+                    var response = await httpClient.GetAsync($"api/products/byrestrictions/?StoreId=${storeId}{restrictionsParameters}");
+
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var productsRestriction = await response.Content.ReadAsJsonAsync<IEnumerable<ProductRestrictionResponse>>();
+
+                        foreach (var product in productsRestriction)
+                        {
+                            var p = products[product.ProductId];
+
+                            p.Items = product.Ingredients.Select(i => new ItemToGet() { Name = i }).ToList();
+
+                            products[product.ProductId] = p;
+                        }
+
+                        _memoryCache.Set(_cacheName, products, cacheOptions);
+                    }
+                }
+            }
+
             return products.Values;
         }
 
@@ -70,10 +104,8 @@ namespace StoreCatalog.Domain.Models.Product
             {
                 products[product.ProductId] = product;
             }
-            else
-            {
-                await GetProductsAsync();
-            }
+
+            await Task.CompletedTask;
         }
 
         #endregion

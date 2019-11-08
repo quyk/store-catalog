@@ -3,7 +3,7 @@ using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using StoreCatalog.Domain.Enuns;
+using StoreCatalog.Domain.Enums;
 using StoreCatalog.Domain.Interfaces;
 using StoreCatalog.Domain.Models.Area;
 using StoreCatalog.Domain.ServiceBus.Topic;

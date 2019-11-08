@@ -1,4 +1,5 @@
 ﻿using StoreCatalog.Contract;
+using StoreCatalog.Contract.Requests;
 using StoreCatalog.Domain.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace StoreCatalog.Domain.Models.Store
 
         public async Task<Ready> CheckStoreStatus()
         {
-            var products = await _productService.GetProductsAsync();
+            var products = await _productService.GetProductsAsync(new ProductRequest() { StoreName = "Los Angeles - Pasadena" });
             var area = await _areaService.GetAreaAsync();
 
             if ((products != null && products.Count() > 0) && area != null)
