@@ -1,11 +1,10 @@
 ﻿using StoreCatalog.Domain.Models.Area;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StoreCatalog.Domain.Interfaces
 {
     /// <summary>
-    /// Area Service
+    /// Area Service Abstraction
     /// </summary>
     public interface IAreaService
     {

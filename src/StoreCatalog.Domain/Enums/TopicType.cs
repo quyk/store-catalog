@@ -1,11 +1,22 @@
-﻿namespace StoreCatalog.Domain.Enums
+﻿using System.ComponentModel;
+
+namespace StoreCatalog.Domain.Enums
 {
     /// <summary>
     /// Represents available ServiceBus topics
     /// </summary>
     public enum TopicType
     {
+        [Description("Product")]
         Product,
-        ProductionArea
+
+        [Description("ProductionArea")]
+        ProductionArea,
+
+        [Description("StoreCatalogReady")]
+        StoreCatalogReady,
+
+        [Description("UserWithLessOffer")]
+        UserWithLessOffer
     }
 }

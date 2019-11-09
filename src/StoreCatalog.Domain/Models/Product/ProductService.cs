@@ -1,8 +1,10 @@
 ﻿using GeekBurger.Products.Contract;
 using Microsoft.Extensions.Caching.Memory;
 using StoreCatalog.Contract.Requests;
+using StoreCatalog.Domain.Enums;
 using StoreCatalog.Domain.Extensions;
 using StoreCatalog.Domain.Interfaces;
+using StoreCatalog.Domain.ServiceBus.Topic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,7 @@ namespace StoreCatalog.Domain.Models.Product
 
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
+        private readonly ITopicBus _topicBus;
         private readonly string _cacheName = "products";
 
         #endregion
@@ -25,10 +28,12 @@ namespace StoreCatalog.Domain.Models.Product
         #region "  Constructor  "
 
         public ProductService(IHttpClientFactory httpClientFactory,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            ITopicBus topicBus)
         {
             _httpClientFactory = httpClientFactory;
             _memoryCache = memoryCache;
+            _topicBus = topicBus;
         }
 
         #endregion
@@ -91,6 +96,12 @@ namespace StoreCatalog.Domain.Models.Product
                         }
 
                         _memoryCache.Set(_cacheName, products, cacheOptions);
+
+                        var productsId = productsRestriction.Select(p => p.ProductId);
+
+                        await _topicBus.SendAsync(TopicType.UserWithLessOffer.GetDescription(), "Products with restriction find!");
+
+                        return products.Where(p => productsId.Contains(p.Key)).Select(v => v.Value);
                     }
                 }
             }

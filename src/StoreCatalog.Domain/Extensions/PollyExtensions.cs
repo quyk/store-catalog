@@ -3,7 +3,7 @@ using Polly.Extensions.Http;
 using System;
 using System.Net.Http;
 
-namespace StoreCatalog.Domain.IoC
+namespace StoreCatalog.Domain.Extensions
 {
     /// <summary>
     /// Usefull methods to help on Polly configurations

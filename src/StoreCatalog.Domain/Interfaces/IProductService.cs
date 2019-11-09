@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace StoreCatalog.Domain.Interfaces
 {
+    /// <summary>
+    /// Product Service Abstraction
+    /// </summary>
     public interface IProductService
     {
         /// <summary>

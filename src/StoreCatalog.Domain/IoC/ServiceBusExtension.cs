@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace StoreCatalog.Domain.IoC
 {
+    /// <summary>
+    /// Usefull IServiceCollection extension methods
+    /// </summary>
     public static class ServiceBusExtension
     {
+        /// <summary>
+        /// Configure all ServiceBus receivers
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        /// <returns>IServiceCollection</returns>
         public static async Task<IServiceCollection> UseServiceBus(this IServiceCollection services)
         {
             var serviceProvider = services.BuildServiceProvider();

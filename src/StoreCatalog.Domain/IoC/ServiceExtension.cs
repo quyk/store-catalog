@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StoreCatalog.Domain.Extensions;
 using StoreCatalog.Domain.HttpClientFactory;
 using StoreCatalog.Domain.Interfaces;
 using StoreCatalog.Domain.Models.Area;
@@ -41,7 +42,7 @@ namespace StoreCatalog.Domain.IoC
         /// <param name="services">IServiceCollection</param>
         /// <param name="configuration">IConfiguration</param>
         /// <returns>IServiceCollection with HttpClients</returns>
-        public static IServiceCollection ConfigureHttpClients(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection ConfigureHttpClients(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpClient("Products", client =>
             {
