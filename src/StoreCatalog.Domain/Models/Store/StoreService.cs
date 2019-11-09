@@ -1,6 +1,9 @@
 ﻿using StoreCatalog.Contract;
 using StoreCatalog.Contract.Requests;
+using StoreCatalog.Domain.Enums;
+using StoreCatalog.Domain.Extensions;
 using StoreCatalog.Domain.Interfaces;
+using StoreCatalog.Domain.ServiceBus.Topic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,15 +15,18 @@ namespace StoreCatalog.Domain.Models.Store
 
         private readonly IProductService _productService;
         private readonly IAreaService _areaService;
+        private readonly ITopicBus _topicBus;
 
         #endregion
 
         #region "  Constructor  "
 
-        public StoreService(IProductService productService, IAreaService areaService)
+        public StoreService(IProductService productService, IAreaService areaService,
+            ITopicBus topicBus)
         {
             _productService = productService;
             _areaService = areaService;
+            _topicBus = topicBus;
         }
 
         #endregion
@@ -34,10 +40,14 @@ namespace StoreCatalog.Domain.Models.Store
 
             if ((products != null && products.Count() > 0) && area != null)
             {
+                var storeId = products.FirstOrDefault().StoreId;
+
+                await _topicBus.SendAsync(TopicType.StoreCatalogReady.GetDescription(), $"Store: {storeId}. Status: {true}");
+
                 return new Ready()
                 {
                     IsReady = true,
-                    StoreId = products.FirstOrDefault().StoreId
+                    StoreId = storeId
                 };
             }
 
