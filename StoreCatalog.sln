@@ -14,9 +14,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{3FF38A50-3BE8-4B00-AF1B-D3E73B92ACF6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
 		geekburgerstorecatalog.PublishSettings = geekburgerstorecatalog.PublishSettings
 		NuGet.Config = NuGet.Config
+		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ED7AB453-F493-4186-BCF1-4269B027077E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreCatalog.Test", "test\StoreCatalog.Test\StoreCatalog.Test.csproj", "{A5AAF02B-5AF7-45EC-8CAB-801560F73994}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +42,10 @@ Global
 		{2666EF82-8D25-4D0B-A194-2886D4C857EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2666EF82-8D25-4D0B-A194-2886D4C857EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2666EF82-8D25-4D0B-A194-2886D4C857EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5AAF02B-5AF7-45EC-8CAB-801560F73994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5AAF02B-5AF7-45EC-8CAB-801560F73994}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5AAF02B-5AF7-45EC-8CAB-801560F73994}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5AAF02B-5AF7-45EC-8CAB-801560F73994}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +54,7 @@ Global
 		{5717E586-F096-42FF-BB73-8CADC745AEA1} = {4BFF1078-F329-4ADC-A2E3-ED6E7E6E7FA2}
 		{34D361E5-9EAD-4FB5-8D6C-4558A419F6DA} = {4BFF1078-F329-4ADC-A2E3-ED6E7E6E7FA2}
 		{2666EF82-8D25-4D0B-A194-2886D4C857EB} = {4BFF1078-F329-4ADC-A2E3-ED6E7E6E7FA2}
+		{A5AAF02B-5AF7-45EC-8CAB-801560F73994} = {ED7AB453-F493-4186-BCF1-4269B027077E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {277F2CAF-53ED-44A4-A8A0-5CB36434A176}
