@@ -37,10 +37,10 @@ dotnet test
 * [dotnet core](https://docs.microsoft.com/pt-br/dotnet/core/) - Web API e Class Library
 * [xUnit](https://xunit.net/) - Tests framework
 
-## Authors
+## Autores
 
-* **Quyk** - [Quyk](https://github.com/quyk)
+* **Quyk Mendonça** - [Quyk](https://github.com/quyk)
 * **Felipe Somogyi** - [LeaoSomogyi](https://github.com/LeaoSomogyi)
-* **thiramos** - [thiramos](https://github.com/thiramos)
+* **Thiago Ramos** - [thiramos](https://github.com/thiramos)
 
-Confira todos os participantes em [contributors](https://github.com/quyk/store-catalog/graphs/contributors)
+Confira todos os participantes em [contribuídores](https://github.com/quyk/store-catalog/graphs/contributors)
