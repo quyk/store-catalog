@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoreCatalog.Contract.Responses;
+using StoreCatalog.Domain.Enums;
 using StoreCatalog.Domain.Interfaces;
+using StoreCatalog.Domain.ServiceBus.Topic;
 using System;
 using System.Threading.Tasks;
 
@@ -14,11 +16,13 @@ namespace StoreCatalog.Api.Controllers
     {
         private readonly IAreaService _areaService;
         private readonly IMapper _mapper;
+        private readonly ITopicBus _topicBus;
 
-        public ProductionController(IAreaService areaService, IMapper mapper)
+        public ProductionController(IAreaService areaService, IMapper mapper, ITopicBus topicBus)
         {
             _areaService = areaService;
             _mapper = mapper;
+            _topicBus = topicBus;
         }
 
         /// <summary>
@@ -41,6 +45,8 @@ namespace StoreCatalog.Api.Controllers
         {
             try
             {
+                await _topicBus.SendAsync(TopicType.Log.ToString(), "Calling Get Areas..");
+
                 var response = await _areaService.GetAreaAsync();
 
                 if (response != null)
@@ -54,7 +60,13 @@ namespace StoreCatalog.Api.Controllers
             }
             catch (Exception ex)
             {
+                await _topicBus.SendAsync(TopicType.Log.ToString(), ex.ToString());
+
                 return BadRequest(ex);
+            }
+            finally
+            {
+                await _topicBus.SendAsync(TopicType.Log.ToString(), "Returning Get Areas..");
             }
         }
     }

@@ -17,6 +17,9 @@ namespace StoreCatalog.Domain.Enums
         StoreCatalogReady,
 
         [Description("UserWithLessOffer")]
-        UserWithLessOffer
+        UserWithLessOffer,
+
+        [Description("Log")]
+        Log
     }
 }

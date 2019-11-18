@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using StoreCatalog.Contract;
+using StoreCatalog.Domain.Enums;
 using StoreCatalog.Domain.Interfaces;
 using StoreCatalog.Domain.ServiceBus.Topic;
-using StoreCatalog.Domain.Suports.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -16,15 +15,12 @@ namespace StoreCatalog.Api.Controllers
     {
         private readonly IStoreService _storeService;
         private readonly ITopicBus _topicBus;
-        private readonly ServiceBusOption _option;
 
         public StoreController(IStoreService storeService,
-                               ITopicBus topicBus,
-                               IOptions<ServiceBusOption> option)
+                               ITopicBus topicBus)
         {
             _storeService = storeService;
             _topicBus = topicBus;
-            _option = option.Value;
         }
 
         /// <summary>
@@ -47,7 +43,7 @@ namespace StoreCatalog.Api.Controllers
         {
             try
             {
-                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, "Calling Get Store..");
+                await _topicBus.SendAsync(TopicType.Log.ToString(), "Calling Get Store..");
 
                 var store = await _storeService.CheckStoreStatus();
 
@@ -62,12 +58,13 @@ namespace StoreCatalog.Api.Controllers
             }
             catch (Exception ex)
             {
-                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, ex.ToString());
+                await _topicBus.SendAsync(TopicType.Log.ToString(), ex.ToString());
+
                 return BadRequest(ex);
             }
             finally
             {
-                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, "Returning Get Store..");
+                await _topicBus.SendAsync(TopicType.Log.ToString(), "Returning Get Store..");
             }
         }
     }
