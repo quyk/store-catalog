@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using StoreCatalog.Api.Models;
 using StoreCatalog.Domain.ServiceBus;
-using StoreCatalog.Domain.ServiceBus.Topic;
-using StoreCatalog.Domain.Suports.Options;
+using System;
 using System.Threading.Tasks;
 
 namespace StoreCatalog.Api.Controllers
@@ -14,9 +12,7 @@ namespace StoreCatalog.Api.Controllers
     {
         private readonly IQueueBus _queueBus;
 
-        public BusController(IQueueBus queueBus,
-                             ITopicBus topicBus,
-                             IOptions<ServiceBusOption> option)
+        public BusController(IQueueBus queueBus)
         {
             _queueBus = queueBus;
         }
@@ -24,8 +20,15 @@ namespace StoreCatalog.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> SendAsync([FromBody] BusModel model)
         {
-            await _queueBus.SendAsync(model.Message);
-            return Created("", null);
+            try
+            {
+                await _queueBus.SendAsync(model.Message);
+                return Created("", null);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception);
+            }
         }
     }
 }

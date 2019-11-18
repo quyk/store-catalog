@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ED7AB453-F493-4186-BCF1-4269B027077E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreCatalog.Test", "test\StoreCatalog.Test\StoreCatalog.Test.csproj", "{A5AAF02B-5AF7-45EC-8CAB-801560F73994}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreCatalog.Api.Test", "test\StoreCatalog.Api.Test\StoreCatalog.Api.Test.csproj", "{A5AAF02B-5AF7-45EC-8CAB-801560F73994}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Interfaces;
-using StoreCatalog.Domain.ServiceBus.Topic;
-using StoreCatalog.Domain.Suports.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -18,10 +15,7 @@ namespace StoreCatalog.Api.Controllers
         private readonly IAreaService _areaService;
         private readonly IMapper _mapper;
 
-        public ProductionController(IAreaService areaService, 
-                                    IMapper mapper,
-                                    ITopicBus topicBus,
-                                    IOptions<ServiceBusOption> option)
+        public ProductionController(IAreaService areaService, IMapper mapper)
         {
             _areaService = areaService;
             _mapper = mapper;
@@ -43,16 +37,20 @@ namespace StoreCatalog.Api.Controllers
         [HttpGet("areas")]
         [ProducesResponseType(typeof(AreasResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<ActionResult<AreasResponse>> GetAreas()
+        public async Task<ActionResult> GetAreasAsync()
         {
             try
             {
                 var response = await _areaService.GetAreaAsync();
 
                 if (response != null)
+                {
                     return Ok(_mapper.Map<AreasResponse>(response));
+                }
                 else
+                {
                     return NotFound();
+                }
             }
             catch (Exception ex)
             {

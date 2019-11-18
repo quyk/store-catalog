@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using StoreCatalog.Api.Models;
 using StoreCatalog.Contract;
 using StoreCatalog.Domain.Interfaces;
 using StoreCatalog.Domain.ServiceBus.Topic;
@@ -17,7 +16,7 @@ namespace StoreCatalog.Api.Controllers
     {
         private readonly IStoreService _storeService;
         private readonly ITopicBus _topicBus;
-        private readonly IOptions<ServiceBusOption> _option;
+        private readonly ServiceBusOption _option;
 
         public StoreController(IStoreService storeService,
                                ITopicBus topicBus,
@@ -25,7 +24,7 @@ namespace StoreCatalog.Api.Controllers
         {
             _storeService = storeService;
             _topicBus = topicBus;
-            _option = option;
+            _option = option.Value;
         }
 
         /// <summary>
@@ -44,27 +43,31 @@ namespace StoreCatalog.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Ready), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<ActionResult<Ready>> GetStore()
+        public async Task<ActionResult> GetStoreAsync()
         {
             try
             {
-                await _topicBus.SendAsync(_option.Value.ServiceBus.TopicLog, "Calling Get Store..");
+                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, "Calling Get Store..");
 
                 var store = await _storeService.CheckStoreStatus();
 
                 if (store != null)
+                {
                     return Ok(store);
+                }
                 else
+                {
                     return NotFound();
+                }
             }
             catch (Exception ex)
             {
-                await _topicBus.SendAsync(_option.Value.ServiceBus.TopicLog, ex.ToString());
+                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, ex.ToString());
                 return BadRequest(ex);
             }
             finally
             {
-                await _topicBus.SendAsync(_option.Value.ServiceBus.TopicLog, "Returning Get Store..");
+                await _topicBus.SendAsync(_option.ServiceBus.TopicLog, "Returning Get Store..");
             }
         }
     }

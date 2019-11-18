@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using StoreCatalog.Api.Models;
 using StoreCatalog.Contract.Requests;
 using StoreCatalog.Contract.Responses;
 using StoreCatalog.Domain.Interfaces;
-using StoreCatalog.Domain.ServiceBus.Topic;
-using StoreCatalog.Domain.Suports.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,10 +18,7 @@ namespace StoreCatalog.Api.Controllers
         private readonly IProductService _productService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, 
-                                 IMapper mapper,
-                                 ITopicBus topicBus,
-                                 IOptions<ServiceBusOption> option)
+        public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
             _mapper = mapper;
@@ -47,16 +40,20 @@ namespace StoreCatalog.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]        
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProduct([FromQuery] ProductRequest productRequest)
+        public async Task<ActionResult> GetProductAsync([FromQuery] ProductRequest productRequest)
         {
             try
             {
                 var products = await _productService.GetProductsAsync(productRequest);
 
                 if (products != null)
+                {
                     return Ok(_mapper.Map<IEnumerable<ProductResponse>>(products));
+                }
                 else
+                {
                     return NotFound();
+                }
             }
             catch (Exception ex)
             {
